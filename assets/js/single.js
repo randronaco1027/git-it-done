@@ -1,19 +1,22 @@
 var repoNameEl = document.querySelector("#repo-name");
 var issueContainerEl = document.querySelector("#issues-container");
 var limitWarningEl = document.querySelector("#limit-warning");
-var repoNameEl = document.querySelector("#repo-name");
 
 var getRepoName = function () {
-    var queryString = document.location.search
-    var repoName = queryString.split("=")[1]
+    // grab repo name from url query string
+    var queryString = document.location.search;
+    var repoName = queryString.split("=")[1];
+
     if (repoName) {
-        getRepoIssues(repoName)
-        repoNameEl.textContent = repoName
+        // display repo name on the page
+        repoNameEl.textContent = repoName;
+
+        getRepoIssues(repoName);
+    } else {
+        // if no repo was given, redirect to the homepage
+        document.location.replace("./index.html");
     }
-    else {
-        document.location.replace("./index.html")
-    }
-}
+};
 
 var getRepoIssues = function (repo) {
     // format the github api url
@@ -31,10 +34,9 @@ var getRepoIssues = function (repo) {
                     displayWarning(repo);
                 }
             });
-        }
-        else {
-
-            document.location.replace("./index.html")
+        } else {
+            // if not successful, redirect to homepage
+            document.location.replace("./index.html");
         }
     });
 };
@@ -57,7 +59,6 @@ var displayIssues = function (issues) {
         var titleEl = document.createElement("span");
         titleEl.textContent = issues[i].title;
 
-
         // append to container
         issueEl.appendChild(titleEl);
 
@@ -67,8 +68,7 @@ var displayIssues = function (issues) {
         // check if issue is an actual issue or a pull request
         if (issues[i].pull_request) {
             typeEl.textContent = "(Pull request)";
-        }
-        else {
+        } else {
             typeEl.textContent = "(Issue)";
         }
 
@@ -94,8 +94,4 @@ var displayWarning = function (repo) {
     limitWarningEl.appendChild(linkEl);
 };
 
-
-
-
-
-getRepoName()
+getRepoName();
